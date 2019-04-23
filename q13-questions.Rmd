@@ -1,0 +1,160 @@
+---
+title: "Quiz 13 Solution"
+author: "Lucas Carlos"
+date: "November 13, 2017"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo    = TRUE)
+knitr::opts_chunk$set(comment = '')
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error   = FALSE)
+```
+
+## Introduction
+
+This quiz introduces you to some basic exploratory data analysis using tools from the tidyverse collection of packages.  I have provided the solution as a pdf.  Your job is to fill in the missing code where you see blanks and experiment with Rmarkdown to learn about some of the functions.  Good luck!  I look forward to seeing your finished files on our canvas page
+
+## Loading and Installing Packages
+
+Load packages using library().  You may need to install these packages first if they are not already installed
+
+```{r}
+library(tidyverse)
+library(tidyr)
+library(gapminder)
+```
+
+
+## Getting to know a dataset
+
+Use head() to view the first 5 lines of gapminder
+
+```{r}
+head(gapminder, n = 5)
+```
+
+Use names() to find the columns (variable) name)
+
+```{r}
+names(gapminder)
+```
+
+Use dim() to find the number of rows and columns of gapminder
+
+```{r}
+dim(gapminder)
+```
+
+Use glimpse() to take a look at gapminder
+
+```{r}
+glimpse(gapminder)
+```
+
+Use str() to view the structure of gapminder
+
+```{r}
+str(gapminder)
+```
+
+Use summary() to make numeric summary of gapminder
+
+```{r}
+summary(gapminder)
+```
+
+## Selecting a subset of the Variables
+
+You use select() when you want to select a subset of the variables.  Use select() to select only the continent, year, and pop.
+
+```{r}
+gapminder %>%
+  select(continent, year, pop)
+```
+
+
+## Filtering Observations 
+
+Add a filter() line after the pipe (%>%) to extract only the observations from the year 1957.   Remember that you use == to compare two values.  
+
+```{r}
+gapminder %>% 
+  filter(year == 1957) 
+```
+
+
+
+Filter the gapminder data to retrieve only the observation from China in the year 2002.
+
+```{r}
+gapminder %>% 
+  filter(year == 2002, country == "China") 
+```
+
+# Arranging Observations
+
+You use arrange() to sort observations in ascending or descending order of a particular variable. In this case, you'll sort the dataset based on the pop variable.
+
+```{r}
+# Sort in ascending order of lifeExp
+gapminder %>%
+  arrange(pop)
+  
+# Sort in descending order of lifeExp
+gapminder %>%
+  arrange(desc(lifeExp))
+```
+
+## Filtering and arranging
+
+You will use the pipe operator (%>%) to combine multiple dplyr verbs in a row. In this case, you'll combine a filter() with an arrange() to find the highest population countries in a particular year. Use filter() to extract observations from just the year 1962, then use arrange() to sort in descending order of population (pop).
+
+```{r}
+gapminder %>% 
+  filter(year == 1962) %>%
+  arrange(desc(pop))
+```
+
+## Using mutate to create new column
+
+Suppose we want life expectancy to be measured in months instead of years: you'd have to multiply the existing value by 12. You can use the mutate() verb to change this column, or to create a new column that's calculated this way.
+
+```{r}
+# Use mutate to change lifeExp to be in months
+gapminder %>%
+  mutate(lifeExp = lifeExp * 12)
+
+# Use mutate to create a new column called lifeExpMonths
+gapminder %>%
+  mutate(lifeExpMonths = lifeExp * 12)
+```
+
+## Combining filter, mutate, and arrange
+
+In this exercise, you'll combine all three of the verbs you've learned in this chapter, to find the countries with the highest life expectancy, in months, in the year 2007.
+
+```{r}
+# Filter, mutate, and arrange the gapminder dataset
+gapminder %>%
+  filter(year == 2007) %>%
+  mutate(lifeExpMonths = lifeExp * 12) %>%
+  arrange(desc(lifeExpMonths))
+```
+
+## Using group_by and summarize()
+
+You can group data using the group_by() function and create summary information with summarize.  Use filter() to select only observations from the year 1972, then use group_by() to group the by continent, then use summarize() to calaculate the mean life expectancy by continent and use arrange() to arrange continents by descending order of life expectncy.
+
+```{r}
+gapminder %>%
+  filter(year == 1972) %>%
+  group_by(continent)  %>%
+  summarize(mean_exp = mean(lifeExp)) %>%
+  arrange(desc(mean_exp))
+```
+

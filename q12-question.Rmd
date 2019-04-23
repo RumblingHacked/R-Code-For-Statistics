@@ -1,0 +1,100 @@
+---
+title: "Quiz 12 Solution"
+author: "Lucas Carlos"
+date: "November 13, 2017"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo    = TRUE)
+knitr::opts_chunk$set(comment = '')
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error   = FALSE)
+```
+
+# Introduction
+
+This quiz introduces you to some basic exploratory data analysis using tools from the tidyverse collection of packages.  I have provided the solution as a pdf.  Your job is to fill in the missing code where you see blanks and experiment with Rmarkdown to learn about some of the functions.  Good luck!  I look forward to seeing your finished files on our canvas page
+
+# Load packages using library()
+
+```{r}
+library(tidyverse)
+library(tidyr)
+```
+
+
+# Use head() to view the first 5 lines of mtcars
+
+```{r}
+head(mtcars, n = 5)
+```
+
+# Use names() to find the columns (variable) name)
+
+```{r}
+names(mtcars)
+```
+
+# Use dim() to find the number of rows and columns of mtcars
+
+```{r}
+dim(mtcars)
+```
+
+# Use glimpse() to take a look at mtcars
+
+```{r}
+glimpse(mtcars)
+```
+
+# Use str() to view the structure of mtcars
+
+```{r}
+str(mtcars)
+```
+
+# Use summary() to make numeric summary of mtcars
+
+```{r}
+summary(mtcars)
+```
+
+# Use the pipe operator, group_by(), and summarize() to find the average mpg for each different value of cyl
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(avg_mpg = mean(mpg))
+```
+
+# For each different value of gear, find the average mpg
+
+```{r}
+mtcars %>% 
+  group_by(gear) %>% 
+  summarize(avg_mpg = mean(mpg))
+```
+
+# Plot mpg vs hp and mapping gear to color ggplot(), geom_point(), ggtitle
+
+```{r}
+mtcars %>% 
+  ggplot(aes(x = hp, y = mpg, col = as.factor(gear))) +
+  geom_point() +
+  ggtitle("mpg vs. hp")
+```
+
+# Create three side by side plot for each value of gear using facet_wrap()
+
+```{r}
+mtcars %>% 
+  ggplot(aes(x = hp, y = mpg)) +
+  geom_point(aes(col = as.factor(gear))) +
+  ggtitle("mpg vs. hp") +
+  facet_wrap(~gear)
+```
+

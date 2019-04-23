@@ -1,0 +1,43 @@
+---
+title: "Quiz10"
+author: "Lucas Carlos"
+date: "November 1, 2017"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo     = TRUE)
+knitr::opts_chunk$set(comment  = '')
+knitr::opts_chunk$set(message  = FALSE)
+knitr::opts_chunk$set(error    = FALSE)
+knitr::opts_chunk$set(warnings = FALSE)
+```
+
+## Question 
+
+$X$ is a random variable with density function
+
+$$
+f(x)=
+\begin{cases}
+& \\
+2e^{-2x}  &, \  \text{for} \ \ 0 \leq x\\
+& \\
+ 0 &, \ \text{otherwise} \\
+& \\
+\end{cases}
+$$
+
+Calculate $$ E[X^2] =_{-Inf}\int^{+Inf} x^2 \ f(x) \ dx  $$
+
+
+```{r}
+# Define f
+f <- function(x){(2 * exp(-2 * x)) * (0 < x)}
+
+# Calculate E[x^2]
+integrate(
+  f = function(x){x ^ 2 * f(x)},
+  lower = 0,
+  upper = Inf)$value
+```

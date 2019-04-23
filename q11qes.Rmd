@@ -1,0 +1,60 @@
+---
+title: "Quiz11"
+author: "Lucas Carlos"
+date: "November 9, 2017"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo     = TRUE)
+knitr::opts_chunk$set(comment  = '')
+knitr::opts_chunk$set(message  = FALSE)
+knitr::opts_chunk$set(error    = FALSE)
+knitr::opts_chunk$set(warnings = FALSE)
+knitr::opts_chunk$set(warning  = FALSE)
+```
+
+## Question 
+
+Let $X \sim \mathcal{N}(2,1)$. Generate a random sample of size $10^5$ from $X$ and display the sample as a histogram of with 50 bins overlayed with the density function of $X$.  Let the histogram be blue and the density function orange.
+
+
+```{r}
+# load the tidyverse package
+library(tidyverse)
+```
+
+```{r}
+# create a vector rn form the distribution of X, rnorm()
+rn <- rnorm(n = 1e5, mean = 2, sd = 1)
+# view the head of rn, head()
+head(rn)
+# view the tail of rn, tail() 
+tail(rn)
+# check the length of rn, length()
+length(rn)
+# compute the mean of rn, mean()
+mean(rn)
+# compute the standard deviation of rn()
+sd(rn)
+```
+
+```{r}
+# Create a data_frame with column names x_seq, rn, and d_seq
+x_seq <- seq(from = min(rn), to = max(rn), length = 1e5)
+d_seq <- dnorm(x_seq, mean = 2, sd = 1)
+M <- data_frame(x_seq = x_seq, rn = rn, d_seq = d_seq)
+```
+
+```{r}
+# Plot the histogram with overlayed density
+G <- ggplot(M, aes(x = rn))                                       +
+  geom_histogram(aes(y = ..density..), col = 'blue', fill = 'blue') +
+  geom_line(aes(x = x_seq, y = d_seq), col = 'orange', lwd = 1.2)     +
+  ggtitle("A Histogram with Overlayed Density Function") 
+
+G
+```
+

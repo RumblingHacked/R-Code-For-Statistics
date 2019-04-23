@@ -1,0 +1,125 @@
+---
+title: "Quiz 14 Solution"
+author: "Lucas Carlos"
+date: "November 13, 2017"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo    = TRUE)
+knitr::opts_chunk$set(comment = '')
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error   = FALSE)
+```
+
+## Introduction
+
+This quiz shows you ow to make four basic types of plots that are useful is statistics and data analyis.  You will continue working with the gapminder dataset and the tidyverse package
+
+## Loading and Installing Packages
+
+Load packages using library().  You may need to install these packages first if they are not already installed.
+
+```{r}
+library(tidyverse)
+library(tidyr)
+library(gapminder)
+```
+
+## Filtering the data
+
+Create gapminder_1952 dataset obtained by filtering the gapminder data_set.
+
+```{r}
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+head(gapminder_1952)
+```
+
+## Comparing Life Expectancy and Population
+
+```{r}
+gapminder_1952 %>%
+  ggplot(aes(x = pop, y = lifeExp)) +
+  geom_point()
+```
+
+## Getting a better picture by using scale_x_log10
+
+The graph above is not very nice.  Lets make it better by putting the x values on a log scale.  Add a scale_x_log10() to the previous plot
+
+```{r}
+gapminder_1952 %>%
+  ggplot(aes(x = pop, y = lifeExp)) +
+  geom_point() +
+  scale_x_log10()
+```
+
+## Graphing with both axes on a log scale
+
+Suppose that you want to graph gdp per capita versus population.  Since population and gdp per capita vary many several orders of magnitude, it makes sense to use log scales for both
+
+```{r}
+gapminder_1952 %>% ggplot(aes(x = pop, y = gdpPercap)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() 
+```
+
+## Adding color to your plots
+
+Suppose that you want to plot per capita gdp vs population and indicate which continent each point comes from.  You can use the color aesthetic within gplot to achieve this.
+
+```{r}
+gapminder_1952 %>% ggplot(aes(x = pop, y = gdpPercap, color = continent)) +
+  geom_point()    +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+## Adding size to a plot
+
+Suppose you want to plot life expectancy versus per capita gdp and you want the size of the point to reflect the population of the coutry.  This can be achieved with the size aesthetic within ggplot()
+
+```{r}
+gapminder_1952 %>%
+  ggplot(aes(
+    x     = gdpPercap, 
+    y     = lifeExp, 
+    size  = pop, 
+    color = continent))    +
+  geom_point()          +
+  scale_x_log10()
+```
+
+## Creating  Subraphs using facet_wrap
+
+Suppose that you want a separate graph for each continent that shows the relationship between life expectancy and per capita gdp.  You can use facet_wrap to achieve this.
+
+```{r}
+gapminder_1952 %>%
+  ggplot(aes(x = pop, y = lifeExp)) +
+  geom_point()                      +
+  facet_wrap(~ continent)           +
+  scale_x_log10() 
+```
+
+## Adding a title and changing the axes labels
+
+You can change the axes lables using ylab() and xlab(). You can add a title to the ggplot using ggtitle().  Change the x-label to "Population", the y label to "Life Expectancy" and the add a title "Life Expectancy vs Population by Continent"
+
+```{r}
+gapminder_1952 %>%
+  ggplot(aes(x = pop, y = lifeExp)) +
+  geom_point()                      +
+  facet_wrap(~ continent)           +
+  scale_x_log10()                   +
+  xlab("Population")                +
+  ylab("Life Expectancy")           +
+  ggtitle("Life Expectancy versus Population by Continent")
+```
+

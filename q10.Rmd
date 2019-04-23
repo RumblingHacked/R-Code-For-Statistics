@@ -1,0 +1,93 @@
+---
+title: "Quiz10"
+author: "Lucas Carlos"
+date: "November 1, 2017"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo     = TRUE)
+knitr::opts_chunk$set(comment  = '')
+knitr::opts_chunk$set(message  = FALSE)
+knitr::opts_chunk$set(error    = FALSE)
+knitr::opts_chunk$set(warnings = FALSE)
+```
+
+## Question 
+
+Let $X$ and $Y$ be jointly continuous random variables with density function
+
+$$
+f(x,y)=
+\begin{cases}
+& \\
+\dfrac{8}{3} xy &, \  0 \leq x \leq 1,\ x \leq y \leq 2x \\
+& \\
+ 0 &, \ \text{otherwise} \\
+& \\
+\end{cases}
+$$
+
+Calculate the covariance of $X$ and $Y$.
+
+
+```{r}
+# Define f
+f <- function(x, y){(8 / 3) * x * y * (0 < x & x < 1) * (x <= y & y <= 2 * x)}
+
+# Source iterated_integral.R using source()
+source("iterated_integral.R")
+
+# Define the limits of integration
+xl <- function(y){0}
+xu <- function(y){1}
+yl <- function(x){x}
+yu <- function(x){2 * x}
+```
+
+## Calculate Expected Values
+
+```{r expected values}
+# Calculate E[X]
+EX <- iterated_integral(
+  f = function(x, y){x * f(x, y)}, 
+  xl = xl, 
+  xu = xu,
+  yl = yl,
+  yu = yu,
+  dx = 2)$value
+EX
+```
+
+```{r}
+# Calculate E[Y]
+EY <- iterated_integral(
+  f = function(x, y){y * f(x, y)}, 
+  xl = xl, 
+  xu = xu,
+  yl = yl,
+  yu = yu,
+  dx = 2)$value
+EY
+```
+
+```{r}
+# Calculate E[XY]
+EXY <- iterated_integral(
+  f = function(x, y){(x * y) * f(x, y)}, 
+  xl = xl, 
+  xu = xu,
+  yl = yl,
+  yu = yu,
+  dx = 2)$value
+EXY
+```
+
+## Calculate the Covariance
+
+```{r}
+C_XY <- EXY - EX * EY
+C_XY
+```

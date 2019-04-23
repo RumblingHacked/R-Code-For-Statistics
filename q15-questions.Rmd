@@ -1,0 +1,200 @@
+---
+title: "Quiz 15 Introduction to Matrices in R"
+author: "Lucas Carlos"
+date: "November 28, 2017"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo    = TRUE)
+knitr::opts_chunk$set(comment = '')
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error   = FALSE)
+library(tidyverse)
+```
+
+## Introduction
+
+Matrix Algebra is very important in applied mathematics.  This Quiz walks you through some basic matrix fucntions in R.  To get started lets create two 4 x 4 matrices called A and B respectively
+
+
+## Create a matrix by rows
+
+Use rbind() to create a 4 x 4 matrix
+
+```{r}
+library(dplyr)
+library(tibble)
+A <- rbind(
+  c(1, 2, 6, 4),
+  c(5, 1, 7, 8),
+  c(9, 8, 7, 6),
+  c(2, 4, 3, 0))
+
+A
+```
+
+The above method of creating a matrix has the advantage that what you see is what you get.  
+
+## Create a matrix by binding columns, cbind()
+
+```{r}
+B <- cbind(
+  c(6, 7, 1, 0),
+  c(0, 3, 5, 7),
+  c(2, 4, 6, 4),
+  c(9, 1, 3, 6))
+
+B
+```
+
+)
+
+## The transpose of a matrix
+
+Find the transpose of A using ()
+
+```{r}
+A
+
+t(A)
+```
+## Row means, colmeans, col sums and row sums
+
+Can quickly apply function by columns or rows using apply().  Use MARGIN = 1 for row and MARGIN = 2 for columns.  Also try rowSums(), colSums(), rowMeans(), and colMeans()
+
+```{r}
+# Row sums
+apply(X = A, MARGIN = 1, FUN = sum)
+rowSums(A)
+
+# Column Sums
+apply(X = A, MARGIN = 2, FUN = sum)
+colSums(A)
+
+# Row means
+apply(X = A, MARGIN  = 1, FUN = mean)
+rowMeans(A)
+
+# Column Means
+apply(X = A, MARGIN = 2, FUN = mean)
+colMeans(A)
+
+
+# Row standard deviation
+apply(X = A, MARGIN = 1, FUN = sd)
+
+
+# Column standard deviation
+apply(X = A, MARGIN = 2, FUN = sd)
+
+```
+
+
+## Adding two matrices in R
+
+Add the matrices together, assign to C using the assignment operator
+
+```{r}
+C <- A + B
+C
+```
+
+## Subtracting two matrices
+
+Subtract the matrices from each other, assign to D using the assignment operator <-
+
+```{r}
+D <- A - B
+D
+```
+
+## Multiplying componentwise
+
+If you use * between two matrice of the same dimension you get elementwise products. 
+
+```{r}
+A * B
+```
+
+## Matrix multiplication
+
+Matrix multiplication is not equal to element wise multiplication.  Matrix multiplication is achieved with %*%
+
+```{r}
+A %*% B
+# Notice that matrix multiplication is not commutative
+B %*% A
+# Matrix multiplication is associative 
+(A %*% B) %*% D
+A %*% (B %*% D)
+```
+
+## Subsetting Matrices
+
+You can select specific matrix entries as follows
+
+```{r}
+# Select the entry of A in the second row and third column
+A[2, 3]
+
+# Select the third row of B
+A[3, ]
+
+# Select the 1st column
+A[, 1]
+
+# Select the diagonal of A using diag()
+diag(A)
+```
+
+## Adding row and column names
+
+You can add row names and column names to a matrix using colnames() and rownames()
+
+```{r}
+colnames(B) <- c('blue', 'orange', 'gold', 'purple')
+B
+
+rownames(B) <- c('hot', 'cold', 'spicy', 'sweet')
+B
+```
+
+## Subsetting a matrix using names
+
+You can use row and column names to select specific entries
+
+```{r}
+# Select the hot row of B
+B["hot", ]
+
+# Select the gold columns of B
+B[, "gold"]
+
+# Select the spicy and purple entry
+B["spicy", "purple"]
+```
+
+## Converting a matrix to a data frame and shifting rownames 
+
+```{r}
+B_frame <- B %>% 
+  as.data.frame() %>%
+  rownames_to_column(var = "flavor")
+
+B_frame
+```
+
+## Using ggplot to visualize data
+
+Once you have converted a matrix to a data frame you can use ggplot to graph data.  Use cex = 4 inside of geom_point() to make the dots larger.
+
+```{r}
+B_frame %>%
+  ggplot(aes(x = gold, y = blue, color = flavor)) +
+  geom_point(cex = 4)
+```
+
